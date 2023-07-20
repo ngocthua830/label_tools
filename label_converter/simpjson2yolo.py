@@ -4,8 +4,8 @@ import json
 
 def simplejson2yolo_str(cls_list, simplejson, mode = "detection"):
     yolostr = ""
-    img_width = simplejson["image_width"]
-    img_height = simplejson["image_height"]
+    img_width = int(simplejson["image_width"])
+    img_height = int(simplejson["image_height"])
     if mode == "detection":
         for obj in simplejson["bboxes"]:
             cls_name = obj["class_name"]
@@ -25,7 +25,7 @@ def simplejson2yolo_str(cls_list, simplejson, mode = "detection"):
 
             yolostr += "%s %f %f %f %f\n" % (cls_list.index(cls_name), cs_x, cs_y, s_width, s_height)
     else:
-        for seg in simplejson["segmentations"]:
+        for seg in simplejson["polygon"]:
             cls_name = seg["class_name"]
             if cls_name not in cls_list:
                 cls_list.append(cls_name)
@@ -60,12 +60,16 @@ if __name__ == "__main__":
     #    yolostr = simplejson2yolo_str(cls_list, simplejson)
     #    print(yolostr)
     yolo_folder = "yolo"
-    cls_list, db_yolo_list = simplejson2yolo_db_str(simplejson_folder = "simpjson", mode = "segmentation")
+    cls_list, db_yolo_list = simplejson2yolo_db_str(simplejson_folder = "simpjson", mode = "polygon")
     for f in db_yolo_list:
         print(f[0])
         with open(os.path.join(yolo_folder, f[0]), "w") as outf:
             outf.write(f[1])
-
+            
+    # save classes.txt
+    with open(os.path.join(yolo_folder, "classes.txt"), "w") as outf:
+        for cls in cls_list:
+            outf.write("%s\n" %cls)
 
 
 
