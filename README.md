@@ -1,6 +1,6 @@
-#TOOLS#
+# TOOLS #
 
-##Label Converter##
+## Label Converter ##
 - coco2simpjson
 - coco2yolo
 - csv2simpjson
@@ -18,10 +18,9 @@
 - yolo2simpjson
 - yolo2txt
 
-##Image Converter##
-List:
+## Image Converter ##
 * img2jpg
 * img2resize
 * pdf2jpg
 
-##Dataset Spliter##
+## Dataset Spliter ##
