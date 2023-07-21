@@ -1,6 +1,7 @@
 # TOOLS #
 
 ## Label Converter ##
+Some scripts to facilitate conversion between different dataset annotation formats:
 - coco2simpjson
 - coco2yolo
 
