@@ -2,6 +2,7 @@
 	"file_name": "img00003.jpg",
 	"image_width": 704,
 	"image_height": 576,
+	"class_list": ["chair", "tv", "line"],
 	"bboxes": [
 		{
 			"class_name": "chair",

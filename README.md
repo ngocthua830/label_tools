@@ -11,6 +11,7 @@
 - yolo2simpjson
 - yolo2coco
 - yolo2txt
+- yolo_seg2simpjson
 
 - cvat2simpjson
 
