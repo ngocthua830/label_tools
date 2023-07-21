@@ -19,8 +19,8 @@
 - yolo2txt
 
 <h2>Image Converter</h2>
-* img2jpg
-* img2resize
-* pdf2jpg
+* img2jpg  
+* img2resize  
+* pdf2jpg  
 
 <h2>Dataset Spliter</h2>
