@@ -26,10 +26,10 @@ Some scripts to facilitate conversion between different dataset annotation forma
 - string_converter
 - bbox2simpjson
 
-##Format##
-###bbox###
+## Format ##
+### bbox ###
 x1 y1 x2 y2 class
-###csv###
+### csv ###
 fname, cls_name, conf, x1, y1, x2, y2
 
 
