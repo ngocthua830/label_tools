@@ -24,6 +24,14 @@ Some scripts to facilitate conversion between different dataset annotation forma
 - sheet2json
 - csv2simpjson
 - string_converter
+- bbox2simpjson
+
+##Format##
+###bbox###
+x1 y1 x2 y2 class
+###csv###
+fname, cls_name, conf, x1, y1, x2, y2
+
 
 ## Image Converter ##
 - img2jpg
