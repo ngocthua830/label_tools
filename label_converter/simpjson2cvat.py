@@ -46,7 +46,7 @@ def simpjson2cvat(simpjsonpath, cvatpath):
         fo.write(' <image id="%s" name="%s" width="%s" height="%s">\n' %(i, fpath.name, jc["image_width"], jc["image_height"]))
         for bbox in jc["bboxes"]:
             print(bbox)
-            fo.write('  <box label="%s" source="manual" occluded="0" xtl="%s" ytl="%s" xbr="%s" ybr="%s" z_order="0">\n' %(bbox["class_name"], bbox["x1"], bbox["y1"], bbox["x2"], bbox["y2"]))
+            fo.write('  <box label="%s" source="manual" occluded="0" xtl="%s" ytl="%s" xbr="%s" ybr="%s" z_order="0"></box>\n' %(bbox["class_name"], bbox["x1"], bbox["y1"], bbox["x2"], bbox["y2"]))
         
         for polygon in jc["polygon"]:
             print(polygon)
