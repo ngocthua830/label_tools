@@ -5,6 +5,7 @@ import re
 
 import cv2
 import magic
+from shutil import copyfile
 
 
 def get_img_shape(img_path):
@@ -56,6 +57,7 @@ def yolo2simplejson(img_path, cls_list, yolo_label_path, json_label_path):
     label_dict["image_width"] = width
     label_dict["image_height"] = height
     label_dict["bboxes"] = label_list
+    label_dict["polygon"] = []
     label_dict["file_size"] = file_size
     label_dict["manual_label"] = 0
     label_dict["set_type"] = ""
@@ -70,6 +72,8 @@ def yolo2simplejson_db(img_folder, yolo_folder, json_folder):
 
     # load class list
     cls_list_path = os.path.join(yolo_folder, "classes.txt")
+    copyfile(cls_list_path, os.path.join(json_folder, "classes.txt"))
+    
     with open(cls_list_path, "r") as cls_file:
         cls_list = cls_file.readlines()
     cls_list = [cls.strip() for cls in cls_list]
@@ -93,6 +97,6 @@ if __name__ == "__main__":
     #    yolo2simplejson(img_path, cls_list, yolo_label_path, json_label_path)
 
     img_folder = "images"
-    yolo_folder = "yolo"
-    json_folder = "json"
+    yolo_folder = "labels"
+    json_folder = "labels_simjson"
     yolo2simplejson_db(img_folder, yolo_folder, json_folder)
