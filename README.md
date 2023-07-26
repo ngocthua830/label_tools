@@ -19,6 +19,9 @@ Some scripts to facilitate conversion between different dataset annotation forma
 - simpjson2cvat
 - simpjson2yolo
 
+- simpjson merge
+- simpjson remove class
+
 - json2sheet
 - mask2bbox
 - sheet2json
