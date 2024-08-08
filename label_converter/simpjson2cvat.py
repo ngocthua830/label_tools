@@ -33,7 +33,8 @@ def simpjson2cvat(simpjsonpath, cvatpath):
         class_list = clsf.readlines()
     write_info(fo, class_list)
     
-    for i, fpath in enumerate(simpjsonpath.iterdir()):
+    i = 0
+    for fpath in simpjsonpath.iterdir():
         print(fpath)
         
         if fpath.suffix != ".json":
@@ -43,7 +44,7 @@ def simpjson2cvat(simpjsonpath, cvatpath):
             jc = json.load(jf)
 #        print(jc)
         
-        fo.write(' <image id="%s" name="%s" width="%s" height="%s">\n' %(i, fpath.name, jc["image_width"], jc["image_height"]))
+        fo.write(' <image id="%s" name="%s" width="%s" height="%s">\n' %(i, fpath.stem, jc["image_width"], jc["image_height"]))
         for bbox in jc["bboxes"]:
             print(bbox)
             fo.write('  <box label="%s" source="manual" occluded="0" xtl="%s" ytl="%s" xbr="%s" ybr="%s" z_order="0"></box>\n' %(bbox["class_name"], bbox["x1"], bbox["y1"], bbox["x2"], bbox["y2"]))
@@ -57,13 +58,14 @@ def simpjson2cvat(simpjsonpath, cvatpath):
                 points += "%s,%s;" %(x, y)
             fo.write('  <polygon label="%s" source="manual" occluded="0" points="%s" z_order="0"></polygon>\n' %(polygon["class_name"], points.rstrip(";")))
         fo.write(' </image>\n')
+        i += 1
 
     fo.write('</annotations>')
     fo.close()
 
 if __name__=="__main__":
-    simpjsonpath = Path("simpjson")
-    cvatpath = Path("cvat.xml")
+    simpjsonpath = Path("simpjson_500_resized")
+    cvatpath = Path("cvat_500_resized.xml")
     
     simpjson2cvat(simpjsonpath, cvatpath)
         

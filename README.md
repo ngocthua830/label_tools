@@ -21,6 +21,8 @@ Some scripts to facilitate conversion between different dataset annotation forma
 
 - simpjson merge
 - simpjson remove class
+- simpjson box2polygon
+- simpjson rename class / merge class
 
 - json2sheet
 - mask2bbox
@@ -32,6 +34,8 @@ Some scripts to facilitate conversion between different dataset annotation forma
 ## Format ##
 ### bbox ###
 x1 y1 x2 y2 class
+### bbox polygons ###
+cls_name x1 y1 x2 y2 x3 y3 ... xn yn
 ### csv ###
 fname, cls_name, conf, x1, y1, x2, y2
 

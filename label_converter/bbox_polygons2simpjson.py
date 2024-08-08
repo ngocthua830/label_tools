@@ -13,11 +13,7 @@ def get_img_shape(img_path):
     width = 0
     height = 0
     file_magic = magic.from_file(img_path)
-    pattern = ["(\d+) x (\d+)", "(\d+)x(\d+)"]
-    regex_result = []
-    for p in pattern:
-        regex_result += re.findall(p, file_magic)
-    
+    regex_result = re.findall("(\d+)x(\d+)", file_magic)
     if len(regex_result) > 1:
         width, height = regex_result[1]
     else:
@@ -34,18 +30,23 @@ def bbox2simpjson(cls_list, imgpath, jsonpath, f):
     for line in f[1]:
         line = line.strip()
         linesplit = line.split()
-        cls = linesplit[4]
-        bbox = [float(x) for x in linesplit[:4]]
+        cls = linesplit[0]
+        bbox = [float(x) for x in linesplit[1:]]
+        if len(bbox) < 6:
+            continue
         
-        bbox_dict = {}
-        bbox_dict["class_name"] = cls
-        bbox_dict["conf"] = 1.0
-        bbox_dict["x1"] = bbox[0]
-        bbox_dict["y1"] = bbox[1]
-        bbox_dict["x2"] = bbox[2]
-        bbox_dict["y2"] = bbox[3]
+        points = []
+        for i in range(0, len(bbox), 2):
+            x = bbox[i]
+            y = bbox[i+1]
+            points.append({"x": x, "y": y})
         
-        bbox_list.append(bbox_dict)
+        polygon_dict = {}
+        polygon_dict["class_name"] = cls
+        polygon_dict["conf"] = 1.0
+        polygon_dict["points"] = points
+        
+        polygon_list.append(polygon_dict)
     
     file_size = os.path.getsize(imgpath)
     
@@ -79,7 +80,7 @@ def convert_dataset(imgfopath, bboxfopath, jsonfopath):
         for line in f[1]:
             line = line.strip()
             linesplit = line.split()
-            cls = linesplit[4]
+            cls = linesplit[0]
             if cls not in cls_list:
                 cls_list.append(cls)
     print("class list: ", cls_list)
@@ -90,6 +91,7 @@ def convert_dataset(imgfopath, bboxfopath, jsonfopath):
     
     # create dataset
     for f in filelist:
+        print(f[0])
         imgpattern = "%s/%s*" %(imgfopath, f[0].stem)
         imgpath = Path(glob.glob(imgpattern)[0])
         print(imgpath)
@@ -98,9 +100,9 @@ def convert_dataset(imgfopath, bboxfopath, jsonfopath):
             
 
 if __name__=="__main__":
-    imgfopath = "images"
-    bboxfopath = "bbox"
-    jsonfopath = "simpjson"
+    imgfopath = "i02"
+    bboxfopath = "bbox_polygons_aio"
+    jsonfopath = "simpjson_aio"
     
     convert_dataset(imgfopath, bboxfopath, jsonfopath)
 

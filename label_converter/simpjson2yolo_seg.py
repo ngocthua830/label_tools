@@ -1,6 +1,7 @@
 import os
 import json
 
+from pathlib import Path
 
 def simplejson2yolo_str(cls_list, simplejson):
     yolostr = ""
@@ -22,7 +23,17 @@ def simplejson2yolo_str(cls_list, simplejson):
 def simplejson2yolo_db_str(simplejson_folder):
     db_yolo_list = []
     cls_list = []
+    if os.path.exists(os.path.join(simplejson_folder, "classes.txt")):
+        with open(os.path.join(simplejson_folder, "classes.txt")) as f:
+            c = f.readlines()
+        for cls in c:
+            cls = cls.strip()
+            cls_list.append(cls)
+    print("cls_list", cls_list)
     for fname in os.listdir(simplejson_folder):
+        print(fname)
+        if Path(fname).suffix != ".json":
+            continue
         fname_woext = ".".join(fname.split(".")[:-1])
         fpath = os.path.join(simplejson_folder, fname)
         with open(fpath, "r") as simple_file:
@@ -34,8 +45,8 @@ def simplejson2yolo_db_str(simplejson_folder):
 
 
 if __name__ == "__main__":
-    simplejson_folder = "page_0_210723_simpjson"
-    yolo_folder = "page_0_210723_yolo"
+    simplejson_folder = "simpjson"
+    yolo_folder = "yolo"
     cls_list, db_yolo_list = simplejson2yolo_db_str(simplejson_folder)
     for f in db_yolo_list:
         print(f[0])

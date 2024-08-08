@@ -12,7 +12,11 @@ def get_img_shape(img_path):
     width = 0
     height = 0
     file_magic = magic.from_file(img_path)
-    regex_result = re.findall("(\d+)x(\d+)", file_magic)
+    pattern = ["(\d+) x (\d+)", "(\d+)x(\d+)"]
+    regex_result = []
+    for p in pattern:
+        regex_result += re.findall(p, file_magic)
+    
     if len(regex_result) > 1:
         width, height = regex_result[1]
     else:
@@ -78,11 +82,19 @@ def yolo2simplejson_db(img_folder, yolo_folder, json_folder):
         cls_list = cls_file.readlines()
     cls_list = [cls.strip() for cls in cls_list]
     print(cls_list)
-
+    i = 0
     for fname in os.listdir(img_folder):
+        i += 1
+        print(i, fname)
         img_path = os.path.join(img_folder, fname)
         fname_woext = ".".join(fname.split(".")[:-1])
-        yolo_label_path = list(yolo_folder.glob("%s.*" % fname_woext))[0]
+        yolo_label_path = list(yolo_folder.glob("%s.*" % fname_woext))
+        if len(yolo_label_path) == 0:
+            yolo_label_path = os.path.join(yolo_folder, "%s.txt" % fname_woext)
+            with open(yolo_label_path, "w") as lf:
+                1
+        else:
+            yolo_label_path = yolo_label_path[0]
         json_label_path = os.path.join(json_folder, "%s.json" % fname_woext)
         yolo2simplejson(img_path, cls_list, yolo_label_path, json_label_path)
 
@@ -97,6 +109,6 @@ if __name__ == "__main__":
     #    yolo2simplejson(img_path, cls_list, yolo_label_path, json_label_path)
 
     img_folder = "images"
-    yolo_folder = "labels"
-    json_folder = "labels_simjson"
+    yolo_folder = "yolo"
+    json_folder = "simpjson"
     yolo2simplejson_db(img_folder, yolo_folder, json_folder)

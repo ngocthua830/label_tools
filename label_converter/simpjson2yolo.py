@@ -1,6 +1,6 @@
 import os
 import json
-
+from shutil import copyfile
 
 def simplejson2yolo_str(cls_list, simplejson):
     yolostr = ""
@@ -29,7 +29,17 @@ def simplejson2yolo_str(cls_list, simplejson):
 def simplejson2yolo_db_str(simplejson_folder):
     db_yolo_list = []
     cls_list = []
+    
+    if os.path.exists(os.path.join(simplejson_folder, "classes.txt")):
+        with open(os.path.join(simplejson_folder, "classes.txt"), "r") as outf:
+            for cls in outf.readlines():
+                cls_list.append(cls.strip())
+    
+    print("cls_list", cls_list)
+    
     for fname in os.listdir(simplejson_folder):
+        if fname.split(".")[-1] != "json":
+            continue
         fname_woext = ".".join(fname.split(".")[:-1])
         fpath = os.path.join(simplejson_folder, fname)
         with open(fpath, "r") as simple_file:
@@ -41,19 +51,21 @@ def simplejson2yolo_db_str(simplejson_folder):
 
 
 if __name__ == "__main__":
-    simplejson_folder = "001_simpjson"
-    yolo_folder = "001_yolo"
+    simplejson_folder = "simpjson"
+    yolo_folder = "yolo"
     cls_list, db_yolo_list = simplejson2yolo_db_str(simplejson_folder)
     for f in db_yolo_list:
         print(f[0])
         with open(os.path.join(yolo_folder, f[0]), "w") as outf:
             outf.write(f[1])
             
-    # save classes.txt
-    with open(os.path.join(yolo_folder, "classes.txt"), "w") as outf:
-        for cls in cls_list:
-            outf.write("%s\n" %cls)
-
+#    # save classes.txt
+    if not os.path.exists(os.path.join(simplejson_folder, "classes.txt")):
+        with open(os.path.join(yolo_folder, "classes.txt"), "w") as outf:
+            for cls in cls_list:
+                outf.write("%s\n" %cls)
+    else:
+        copyfile(os.path.join(simplejson_folder, "classes.txt"), os.path.join(yolo_folder, "classes.txt"))
 
 
 
